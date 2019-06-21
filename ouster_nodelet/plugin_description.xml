@@ -1,0 +1,7 @@
+<library path="lib/libouster_nodelet">
+  <class name="ouster_nodelet/os1_cloud_nodelet" type="ouster_nodelet::OS1CloudNodelet" base_class_type="nodelet::Nodelet">
+  <description>
+  Nodlet for converting lindar_packages to point clouds.
+  </description>
+  </class>
+</library>
