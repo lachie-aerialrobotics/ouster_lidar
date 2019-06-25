@@ -14,6 +14,7 @@
 
   <depend>ouster_ros</depend>
   <depend>nodelet</depend>
+  <depend>jsoncpp </depend>
   <export>
       <nodelet plugin="${prefix}/plugin_description.xml"/>
 </export>
