@@ -68,6 +68,12 @@ int OS1AssemblerNodelet::run()
     auto lidar_mode = nh.param("lidar_mode", std::string{});
     auto scan_dur = ns(nh.param("scan_dur_ns", 100000000));
 
+    NODELET_INFO("hostname: %s",hostname.c_str());
+    NODELET_INFO("udp_dest: %s",udp_dest.c_str());
+    NODELET_INFO("lidar_port: %d",lidar_port);
+    NODELET_INFO("lidar_mode: %s",lidar_mode.c_str());
+  
+
     // fall back to metadata file name based on hostname, if available
     auto meta_file = nh.param("metadata", std::string{});
     if (!meta_file.size() && hostname.size())
@@ -277,7 +283,7 @@ bool OS1AssemblerNodelet::validTimestamp(const ros::Time &msg_time)
             1, "OS1 clock is currently not in sync with host. Current host time: "
                    << now << " OS1 message time: " << msg_time
                    << ". Rejecting measurement.");
-        return false;
+        return true;
     }
 
     return true;

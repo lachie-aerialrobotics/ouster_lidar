@@ -13,8 +13,7 @@
 
 
 int main(int argc, char **argv){
-  ros::init(argc, argv, "os1_cloud_node");
-
+  ros::init(argc, argv, "os1_cloud_node11");
   nodelet::Loader nodelet;
   nodelet::M_string remap(ros::names::getRemappings());
   nodelet::V_string nargv;
