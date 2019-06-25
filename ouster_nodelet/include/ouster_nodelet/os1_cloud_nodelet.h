@@ -17,6 +17,11 @@ class OS1CloudNodelet:public nodelet::Nodelet
     bool validTimestamp(const ros::Time& msg_time);
 
     ros::NodeHandle nh;
+    std::string tf_prefix_;
+    std::string sensor_frame_;
+    std::string imu_frame_;
+    std::string lidar_frame_;
+
 
 };
 
