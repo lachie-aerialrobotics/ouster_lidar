@@ -7,9 +7,16 @@ catkin_simple(ALL_DEPS_REQUIRED)
 set(CMAKE_MACOSX_RPATH 0)
 add_definitions(-std=c++11 -Wall)
 
-set(HEADER_FILES include/ouster_nodelet/OS1CloudNodelet.h)
+#
+set(HEADER_FILES
+    include/ouster_nodelet/OS1CloudNodelet.h  
+    include/ouster_nodelet/assembler_nodelet.h
+    )
 
-set(SRC_FILES src/OS1CloudNodelet.cpp)
+set(SRC_FILES 
+    src/OS1CloudNodelet.cpp
+    src/assembler_nodelet.cpp
+    )
 
 cs_add_library(${PROJECT_NAME}
   ${SRC_FILES}

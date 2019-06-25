@@ -4,4 +4,10 @@
   Nodlet for converting lindar_packages to point clouds.
   </description>
   </class>
+<class name="ouster_nodelet/os1_assembler_nodelet" type="ouster_nodelet::OS1AssemblerNodelet" base_class_type="nodelet::Nodelet">
+  <description>
+  Nodlet for converting lindar_packages to point clouds.
+  </description>
+  </class>
+
 </library>

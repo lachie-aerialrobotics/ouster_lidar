@@ -3,4 +3,6 @@
 
   <node pkg="nodelet" type="nodelet" name="os1_cloud_nodelet" args="load ouster_nodelet/os1_cloud_nodelet standalone_nodelet" output="screen">
   </node>
+  <node pkg="nodelet" type="nodelet" name="os1_assembler_nodelet" args="load ouster_nodelet/os1_assembler_nodelet standalone_nodelet" output="screen">
+  </node>
 </launch>
