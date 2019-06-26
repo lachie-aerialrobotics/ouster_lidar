@@ -34,11 +34,12 @@ namespace OS1 = ouster::OS1;
 namespace ouster_nodelet
 
 {
-void OS1AssemblerNodelet::onInit(){
-    
+void OS1AssemblerNodelet::onInit()
+{
+
     NODELET_INFO("[OS1 Assembler Nodelet] Initializing nodlet");
     nh = this->getMTPrivateNodeHandle();
-
+    nh.param("debug", debug_, false);
     auto success = run();
 }
 
@@ -56,7 +57,7 @@ int OS1AssemblerNodelet::run()
                 res.beam_altitude_angles = info.beam_altitude_angles;
                 res.imu_to_sensor_transform = info.imu_to_sensor_transform;
                 res.lidar_to_sensor_transform = info.lidar_to_sensor_transform;
-                return true ;
+                return true;
             });
 
     // empty indicates "not set" since roslaunch xml can't optionally set params
@@ -68,11 +69,10 @@ int OS1AssemblerNodelet::run()
     auto lidar_mode = nh.param("lidar_mode", std::string{});
     auto scan_dur = ns(nh.param("scan_dur_ns", 100000000));
 
-    NODELET_INFO("hostname: %s",hostname.c_str());
-    NODELET_INFO("udp_dest: %s",udp_dest.c_str());
-    NODELET_INFO("lidar_port: %d",lidar_port);
-    NODELET_INFO("lidar_mode: %s",lidar_mode.c_str());
-  
+    NODELET_INFO("hostname: %s", hostname.c_str());
+    NODELET_INFO("udp_dest: %s", udp_dest.c_str());
+    NODELET_INFO("lidar_port: %d", lidar_port);
+    NODELET_INFO("lidar_mode: %s", lidar_mode.c_str());
 
     // fall back to metadata file name based on hostname, if available
     auto meta_file = nh.param("metadata", std::string{});
@@ -112,7 +112,7 @@ int OS1AssemblerNodelet::run()
 
         NODELET_INFO("Using lidar_mode: %s", OS1::to_string(info.mode).c_str());
         NODELET_INFO("Sensor sn: %s firmware rev: %s", info.sn.c_str(),
-                 info.fw_rev.c_str());
+                     info.fw_rev.c_str());
 
         // just serve config service
         ros::spin();
@@ -123,7 +123,7 @@ int OS1AssemblerNodelet::run()
         NODELET_INFO("Connecting to sensor at %s...", hostname.c_str());
 
         NODELET_INFO("Sending data to %s using lidar_mode: %s", udp_dest.c_str(),
-                 lidar_mode.c_str());
+                     lidar_mode.c_str());
 
         auto cli = OS1::init_client(hostname, udp_dest,
                                     OS1::lidar_mode_of_string(lidar_mode),
@@ -145,7 +145,7 @@ int OS1AssemblerNodelet::run()
         populate_metadata_defaults(info, "");
 
         NODELET_INFO("Sensor sn: %s firmware rev: %s", info.sn.c_str(),
-                 info.fw_rev.c_str());
+                     info.fw_rev.c_str());
 
         // publish packet messages from the sensor
         return connection_loop(nh, *cli);
@@ -166,7 +166,7 @@ void OS1AssemblerNodelet::populate_metadata_defaults(OS1::sensor_info &info,
         NODELET_WARN("Unknown sensor firmware version; output may not be reliable");
     else if (v < OS1::min_version)
         NODELET_WARN("Firmware < %s not supported; output may not be reliable",
-                 to_string(OS1::min_version).c_str());
+                     to_string(OS1::min_version).c_str());
 
     if (info.mode == OS1::lidar_mode::MODE_INVALID)
     {
@@ -212,7 +212,7 @@ std::string OS1AssemblerNodelet::read_metadata(const std::string &meta_file)
 
     if (!ifs)
         NODELET_WARN("Failed to read %s; check that the path is valid",
-                 meta_file.c_str());
+                     meta_file.c_str());
 
     return buf.str();
 }
@@ -231,7 +231,7 @@ void OS1AssemblerNodelet::write_metadata(const std::string &meta_file, const std
     else
     {
         NODELET_WARN("Failed to write metadata to %s; check that the path is valid",
-                 meta_file.c_str());
+                     meta_file.c_str());
     }
 };
 
@@ -283,7 +283,14 @@ bool OS1AssemblerNodelet::validTimestamp(const ros::Time &msg_time)
             1, "OS1 clock is currently not in sync with host. Current host time: "
                    << now << " OS1 message time: " << msg_time
                    << ". Rejecting measurement.");
-        return true;
+        if (debug_)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     return true;

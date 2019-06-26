@@ -52,7 +52,8 @@ private:
                                     const std::string &specified_lidar_mode);
    
    // Refrence to private node handle
-   ros::NodeHandle nh;                                 
+   ros::NodeHandle nh;
+   bool debug_;                                 
 };
 
 } // namespace ouster_nodelet

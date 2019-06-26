@@ -21,6 +21,7 @@ class OS1CloudNodelet:public nodelet::Nodelet
     std::string sensor_frame_;
     std::string imu_frame_;
     std::string lidar_frame_;
+    bool debug_;
 
 
 };

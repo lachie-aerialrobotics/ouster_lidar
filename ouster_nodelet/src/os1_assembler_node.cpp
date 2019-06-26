@@ -13,7 +13,7 @@
 
 
 int main(int argc, char **argv){
-  ros::init(argc, argv, "os1_assembler_node");
+  ros::init(argc, argv, "os1_assembler_node22");
 
   nodelet::Loader nodelet;
   nodelet::M_string remap(ros::names::getRemappings());
@@ -21,6 +21,8 @@ int main(int argc, char **argv){
   std::string nodelet_name = ros::this_node::getName();
   nodelet.load(nodelet_name, "ouster_nodelet/os1_assembler_nodelet", remap, nargv);
   // ros::spin();
+
+  
 
   return 0;
 

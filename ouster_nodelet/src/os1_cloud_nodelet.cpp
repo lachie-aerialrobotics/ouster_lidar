@@ -32,6 +32,8 @@ void OS1CloudNodelet::onInit()
 
     // Initialization
     nh = this->getMTPrivateNodeHandle();
+    nh.param("debug", debug_, false);
+    
     int sucess = run();
 };
 
@@ -59,7 +61,6 @@ int OS1CloudNodelet::run()
     // Publisher and subscribers
     auto lidar_pub = nh.advertise<sensor_msgs::PointCloud2>("points", 10);
     auto imu_pub = nh.advertise<sensor_msgs::Imu>("imu", 100);
-    
 
     auto xyz_lut = OS1::make_xyz_lut(W, H, cfg.response.beam_azimuth_angles,
                                      cfg.response.beam_altitude_angles);
@@ -114,13 +115,20 @@ bool OS1CloudNodelet::validTimestamp(const ros::Time &msg_time)
     const ros::Duration kMaxTimeOffset(1.0);
 
     const ros::Time now = ros::Time::now();
-    if (msg_time < (now - kMaxTimeOffset))
+    if (msg_time < (now - kMaxTimeOffset) || debug_)
     {
         ROS_WARN_STREAM_THROTTLE(
             1, "OS1 clock is currently not in sync with host. Current host time: "
                    << now << " OS1 message time: " << msg_time
-                   << ". Rejecting measurement.");
-        return true;
+                   << ". Rejecting measurement. Time offsett");
+        if (debug_)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     return true;
