@@ -279,10 +279,10 @@ bool OS1AssemblerNodelet::validTimestamp(const ros::Time &msg_time)
     const ros::Time now = ros::Time::now();
     if (msg_time < (now - kMaxTimeOffset))
     {
-        NODELET_WARN_STREAM_THROTTLE(
+        ROS_WARN_STREAM_THROTTLE(
             1, "OS1 clock is currently not in sync with host. Current host time: "
                    << now << " OS1 message time: " << msg_time
-                   << ". Rejecting measurement.");
+                   << ". Rejecting measurement. Time offsett " << (now - msg_time) << " ms.");
         if (debug_)
         {
             return true;
