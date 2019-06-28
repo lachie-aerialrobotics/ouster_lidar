@@ -81,19 +81,19 @@ int OS1CloudNodelet::run()
                 lidar_pub.publish(msg);
         });
 
-    auto lidar_handler = [&](const PacketMsg &pm) mutable {
-        batch_and_publish(pm.buf.data(), it);
+    auto lidar_handler = [&](const PacketMsg::ConstPtr& pm) mutable {
+        batch_and_publish(pm->buf.data(), it);
     };
 
-    auto imu_handler = [&](const PacketMsg &p) {
-        auto imu_msg = ouster_ros::OS1::packet_to_imu_msg(p, imu_frame);
+    auto imu_handler = [&](const PacketMsg::ConstPtr& p) {
+        auto imu_msg = ouster_ros::OS1::packet_to_imu_msg(*p, imu_frame);
         if (validTimestamp(msg.header.stamp))
             imu_pub.publish(imu_msg);
     };
 
-    auto lidar_packet_sub = nh.subscribe<PacketMsg, const PacketMsg &>(
+    auto lidar_packet_sub = nh.subscribe<PacketMsg>(
         "lidar_packets", 2048, lidar_handler);
-    auto imu_packet_sub = nh.subscribe<PacketMsg, const PacketMsg &>(
+    auto imu_packet_sub = nh.subscribe<PacketMsg>(
         "imu_packets", 100, imu_handler);
 
     // publish transforms
